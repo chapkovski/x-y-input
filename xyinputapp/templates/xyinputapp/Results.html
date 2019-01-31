@@ -1,0 +1,17 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+    <div class="alert alert-info">
+    <h4>Your input:</h4>
+    <h5>X: {{ player.x }}</h5>
+    <h5>Y: {{ player.y }}</h5>
+    </div>
+    {% next_button %}
+{% endblock %}
+
+

@@ -1,0 +1,67 @@
+{% extends "global/Page.html" %}
+{% load otree  otree_tools %}
+
+{% block title %}
+    Input
+{% endblock %}
+
+{% block content %}
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for key, value in form.errors.items %}
+                <p>{{ key }}:{{ value }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <canvas id="mycanvas" style="width:300px;height:150px;"></canvas>
+    <div class="info"></div>
+
+    {{ form.x.as_hidden }}
+    {{ form.y.as_hidden }}
+    {% next_button %}
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="http://code.createjs.com/easeljs-0.7.0.min.js"></script>
+    <script>
+        // Code goes here
+        $(function () {
+            var CJ = createjs;
+            var stage;
+            var circle, knob;
+            var CIRCLE_RADIUS = 50;
+
+            stage = new CJ.Stage("mycanvas");
+            var rect = new createjs.Shape();
+            rect.graphics.beginFill('red');
+            rect.graphics.drawRect(0, 0, 300, 150);
+            rect.graphics.endFill();
+
+            stage.addChild(rect);
+            stage.update();
+
+
+            knob = new CJ.Shape();
+            knob.graphics.beginFill("blue");
+            knob.graphics.drawCircle(0, 0, 10);
+            knob.x = CIRCLE_RADIUS;
+            knob.y = CIRCLE_RADIUS;
+            stage.addChild(knob);
+
+            stage.update();
+            stage.enableMouseOver(20);
+
+            knob.addEventListener("pressmove", function (event) {
+                knob.x = event.stageX;
+                knob.y = event.stageY;
+                $(".info").text("X: " + event.stageX.toFixed(2) + " Y:" + event.stageY.toFixed(2));
+                $("#id_x").val(event.stageX.toFixed(2));
+                $("#id_y").val(event.stageY.toFixed(2));
+                stage.update();
+            });
+        });
+    </script>
+{% endblock %}
+
